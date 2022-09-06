@@ -1,6 +1,0 @@
-className: com.unisinos.sistema.adapter.inbound.controller.ItemController, methodName: getItems
-className: com.unisinos.sistema.application.service.ItemServiceImpl, methodName: getItem
-className: com.unisinos.sistema.adapter.outbound.repository.PostgresItemRepository, methodName: getItemById
-className: com.unisinos.sistema.adapter.outbound.entity.ItemEntity, methodName: <init>
-className: com.unisinos.sistema.adapter.inbound.mapper.ItemMapper, methodName: mapToResponse
-className: com.unisinos.sistema.adapter.outbound.builder.ItemBuilder, methodName: builder
