@@ -15,8 +15,8 @@ import java.util.zip.ZipInputStream;
 
 public class MonoliseTest {
 
-    private final static String DIRETORIO_LEITURA = "src/main/resources/arquivos.zip";
-    private final static Double LIMITE_DECOMPOSICAO = 10.0;
+    private final static String DIRETORIO_LEITURA = "src/main/resources/trace-shopping-cart.zip";
+    private final static Double LIMITE_DECOMPOSICAO = 80.0;
 
     public static void main(String[] args) {
         executarMonolise();
