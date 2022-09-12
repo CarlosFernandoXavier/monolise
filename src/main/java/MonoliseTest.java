@@ -15,8 +15,10 @@ import java.util.zip.ZipInputStream;
 
 public class MonoliseTest {
 
-    private final static String DIRETORIO_LEITURA = "src/main/resources/trace-shopping-cart.zip";
-    private final static Double LIMITE_DECOMPOSICAO = 80.0;
+    //private final static String DIRETORIO_LEITURA = "src/main/resources/trace-shopping-cart.zip";
+    //private final static String DIRETORIO_LEITURA = "src/main/resources/arquivos.zip";
+    private final static String DIRETORIO_LEITURA = "src/main/resources/trace-blog-api.zip";
+    private final static Double LIMITE_DECOMPOSICAO = 50.0;
 
     public static void main(String[] args) {
         executarMonolise();
@@ -146,9 +148,11 @@ public class MonoliseTest {
         config.setApplicationName("TesteAplication");
         config.setModelPackageName("com.unisinos.sistema.adapter.outbound.entity");
         config.setDaoPackageName("com.unisinos.sistema.adapter.outbound.repository");
-        config.setServicePackageName("com.unisinos.sistema.application.service");
+        //config.setServicePackageName("com.unisinos.sistema.application.service");
+        config.setServicePackageName("me.zhulin.shopapi.service.impl");
         config.setDtoPackageName("com.unisinos.sistema.adapter.inbound.model");
-        config.setControllerPackageName("com.unisinos.sistema.adapter.inbound.controller");
+        //config.setControllerPackageName("com.unisinos.sistema.adapter.inbound.controller");
+        config.setControllerPackageName("me.zhulin.shopapi.api");
         config.setModelWeight(1.0);
         config.setDaoWeight(0.5);
         config.setServiceWeight(1.0);
@@ -282,12 +286,8 @@ public class MonoliseTest {
                     Microservice micro = microservices.get(indiceMicrosservico2);
                     microservices.remove(micro);
                     List<ClassResponse> classResponses = micro.getClasses();
-                    for (Column colunaFiltrada : colunasFiltradas) {
-                        gerarClassesParaMicrosservico(funcionalidadesMap, colunaFiltrada.getNomeFuncionalidade(), classResponses);
-                        if (!micro.getFunctionalities().contains(colunaFiltrada.getNomeFuncionalidade())) {
-                            micro.setFunctionalities(micro.getFunctionalities() + ", " + colunaFiltrada.getNomeFuncionalidade());
-                        }
-                    }
+                    gerarClassesParaMicrosservico(funcionalidadesMap, functionalities, classResponses);
+                    micro.setFunctionalities(micro.getFunctionalities() + ", " + functionalities);
                     micro.setClasses(classResponses);
                     microservices.add(indiceMicrosservico2, micro);
                 }
