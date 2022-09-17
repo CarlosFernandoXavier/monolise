@@ -147,7 +147,8 @@ public class MonoliseTest {
         Config config = new Config();
         config.setApplicationName("TesteAplication");
         config.setModelPackageName("com.unisinos.sistema.adapter.outbound.entity");
-        config.setDaoPackageName("com.unisinos.sistema.adapter.outbound.repository");
+        //config.setDaoPackageName("com.unisinos.sistema.adapter.outbound.repository");
+        config.setDaoPackageName("com.springboot.blog.repository");
         //config.setServicePackageName("com.unisinos.sistema.application.service");
         config.setServicePackageName("me.zhulin.shopapi.service.impl");
         config.setDtoPackageName("com.unisinos.sistema.adapter.inbound.model");
@@ -221,7 +222,6 @@ public class MonoliseTest {
     private static List<Microservice> groupFunctionalitiesBySimilatiry(Map<String, List<Column>> similarityTable,
                                                                        Config config,
                                                                        Map<String, List<Class>> funcionalidadesMap) {
-        List<String> similarities = new ArrayList<>();
         List<Microservice> microservices = new ArrayList<>();
 
         similarityTable.forEach((row, columns) -> {
@@ -230,7 +230,7 @@ public class MonoliseTest {
                     .filter(column -> column.getThreshold() >= config.getDecompositionThreshold())
                     .collect(Collectors.toList());
 
-            if (similarities.isEmpty()) {
+            if (microservices.isEmpty()) {
                 List<ClassResponse> classResponses = new ArrayList<>();
                 gerarClassesParaMicrosservico(funcionalidadesMap, functionalities,
                         classResponses);
@@ -246,11 +246,10 @@ public class MonoliseTest {
                 micro.setFunctionalities(functionalities);
                 micro.setClasses(classResponses);
                 microservices.add(micro);
-                similarities.add(functionalities);
             } else {
                 //PAra cada coluna, preciso ver se a funcionalidade já não existe em algum microsserviço
-                Integer indiceMicrosservico1 = getIndiceMicrosservico(similarities, functionalities);
-                Integer indiceMicrosservico2 = getIndiceMicrosservico(similarities, colunasFiltradas);
+                Integer indiceMicrosservico1 = getIndiceMicrosservico(microservices, functionalities);
+                Integer indiceMicrosservico2 = getIndiceMicrosservico(microservices, colunasFiltradas);
 
                 if (Objects.isNull(indiceMicrosservico1) && Objects.isNull(indiceMicrosservico2)) {
                     List<ClassResponse> classResponses = new ArrayList<>();
@@ -266,8 +265,6 @@ public class MonoliseTest {
                     micro.setFunctionalities(functionalities);
                     micro.setClasses(classResponses);
                     microservices.add(micro);
-
-                    similarities.add(functionalities);
                 } else if (!Objects.isNull(indiceMicrosservico1) && Objects.isNull(indiceMicrosservico2)) {
                     Microservice micro = microservices.get(indiceMicrosservico1);
                     microservices.remove(micro);
@@ -308,10 +305,10 @@ public class MonoliseTest {
         });
     }
 
-    private static Integer getIndiceMicrosservico(List<String> microsservicos, String functionality) {
+    private static Integer getIndiceMicrosservico(List<Microservice> microsservicos, String functionality) {
         Integer indice = null;
         for (int contador = 0; contador < microsservicos.size(); contador++) {
-            if (microsservicos.get(contador).contains(functionality)) {
+            if (microsservicos.get(contador).getFunctionalities().contains(functionality)) {
                 indice = contador;
                 break;
             }
@@ -319,11 +316,11 @@ public class MonoliseTest {
         return indice;
     }
 
-    private static Integer getIndiceMicrosservico(List<String> microsservicos, List<Column> functionalities) {
+    private static Integer getIndiceMicrosservico(List<Microservice> microsservicos, List<Column> functionalities) {
         Integer indice = null;
         for (Column functionality : functionalities) {
             for (int contador = 0; contador < microsservicos.size(); contador++) {
-                if (microsservicos.get(contador).contains(functionality.getNomeFuncionalidade())) {
+                if (microsservicos.get(contador).getFunctionalities().contains(functionality.getNomeFuncionalidade())) {
                     indice = contador;
                     break;
                 }
